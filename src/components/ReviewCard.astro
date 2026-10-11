@@ -8,6 +8,7 @@ interface Props {
   name: string;
   avatar: ImageMetadata;
   prominent?: boolean;
+  starsLabel?: string;
   class?: string;
 }
 
@@ -16,6 +17,7 @@ const {
   name,
   avatar,
   prominent = false,
+  starsLabel = "5 out of 5 stars",
   class: className = "",
 } = Astro.props;
 ---
@@ -53,7 +55,7 @@ const {
       >
       <span
         class="mt-1 flex gap-0.5 text-(--accent)"
-        aria-label="5 out of 5 stars"
+        aria-label={starsLabel}
       >
         {
           Array.from({ length: 5 }).map(() => (

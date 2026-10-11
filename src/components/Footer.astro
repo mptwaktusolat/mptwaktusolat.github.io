@@ -1,7 +1,13 @@
+---
+import { homeCopy, type HomeLocale } from "../lib/home";
+interface Props { locale?: HomeLocale; }
+const { locale = "en" } = Astro.props;
+const copy = homeCopy[locale];
+---
 <footer class="px-6 pb-8 pt-16 text-center">
   <nav
     class="flex items-center justify-center gap-10 text-(--text-muted)"
-    aria-label="Social links"
+    aria-label={copy.socialLabel}
   >
     <a
       href="https://twitter.com/iqfareez"
@@ -48,6 +54,6 @@
       target="_blank"
       rel="noopener noreferrer"
       class="hover:opacity-85">Muhammad Fareez</a
-    >. All rights reserved.
+    >. {copy.copyright}
   </p>
 </footer>

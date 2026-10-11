@@ -1,13 +1,16 @@
 ---
 import { Monitor, Moon, Sun } from "@lucide/astro";
+import type { HomeLocale } from "../lib/home";
+interface Props { locale?: HomeLocale; }
+const { locale = "en" } = Astro.props;
 ---
 
 <button
   type="button"
   data-theme-toggle
   class="cursor-pointer rounded-sm transition-colors hover:text-(--accent)"
-  aria-label="Theme: System. Switch to Light"
-  title="Theme: System"
+  aria-label={locale === "ms" ? "Tema: Sistem. Tukar kepada Cerah" : "Theme: System. Switch to Light"}
+  title={locale === "ms" ? "Tema: Sistem" : "Theme: System"}
 >
   <Monitor
     size={25}
@@ -47,11 +50,12 @@ import { Monitor, Moon, Sun } from "@lucide/astro";
       light: "dark",
       dark: "system",
     };
-    const label: Record<ThemeSetting, string> = {
-      system: "System",
-      light: "Light",
-      dark: "Dark",
-    };
+    const isMalay = document.documentElement.lang === "ms";
+    const label: Record<ThemeSetting, string> = isMalay
+      ? { system: "Sistem", light: "Cerah", dark: "Gelap" }
+      : { system: "System", light: "Light", dark: "Dark" };
+    const themeLabel = isMalay ? "Tema" : "Theme";
+    const switchLabel = isMalay ? "Tukar kepada" : "Switch to";
     const resolvedTheme =
       setting === "system" ? (colorScheme.matches ? "dark" : "light") : setting;
 
@@ -65,9 +69,9 @@ import { Monitor, Moon, Sun } from "@lucide/astro";
       );
     button?.setAttribute(
       "aria-label",
-      `Theme: ${label[setting]}. Switch to ${label[nextSetting[setting]]}`,
+      `${themeLabel}: ${label[setting]}. ${switchLabel} ${label[nextSetting[setting]]}`,
     );
-    button?.setAttribute("title", `Theme: ${label[setting]}`);
+    button?.setAttribute("title", `${themeLabel}: ${label[setting]}`);
   };
 
   applyThemeSetting(getThemeSetting());

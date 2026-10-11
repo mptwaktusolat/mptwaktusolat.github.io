@@ -99,8 +99,8 @@ export function groupTags(posts: BlogPost[]) {
   );
 }
 
-export function formatDate(value: string): string {
-  return new Intl.DateTimeFormat("en-GB", {
+export function formatDate(value: string, locale = "en-GB"): string {
+  return new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "long",
     year: "numeric",

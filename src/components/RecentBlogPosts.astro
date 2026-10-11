@@ -1,6 +1,9 @@
 ---
 import { getCollection } from "astro:content";
 import { formatDate, preparePosts } from "../lib/blog";
+import { homeCopy, type HomeLocale } from "../lib/home";
+interface Props { locale?: HomeLocale; }
+const { locale = "en" } = Astro.props;
 
 const posts = preparePosts(await getCollection("blog")).slice(0, 3);
 const colours = ["#155e75", "#5b21b6", "#9d174d", "#065f46", "#92400e"];
@@ -20,7 +23,7 @@ const colourOffset = Math.floor(Math.random() * colours.length);
             id="recent-posts-title"
             class="mt-3 text-3xl font-bold leading-tight tracking-[-0.035em] text-(--text-primary) md:text-4xl"
           >
-            Recent blog posts
+            {homeCopy[locale].recentPosts}
           </h2>
         </div>
         <div
@@ -43,9 +46,10 @@ const colourOffset = Math.floor(Math.random() * colours.length);
               ]}
             >
               <time datetime={post.postedDate} class="text-sm text-white/80">
-                {formatDate(post.postedDate)}
+                {formatDate(post.postedDate, locale === "ms" ? "ms-MY" : "en-GB")}
               </time>
               <h3
+                lang="en"
                 class:list={[
                   "wrap-break-word font-semibold leading-tight tracking-tight",
                   index === 0

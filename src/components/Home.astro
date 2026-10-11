@@ -9,6 +9,7 @@ import {
   Sparkles,
   Zap,
 } from "@lucide/astro";
+import { homeCopy, homePaths, type HomeLocale } from "../lib/home";
 import Footer from "./Footer.astro";
 import RecentBlogPosts from "./RecentBlogPosts.astro";
 import ReviewCard from "./ReviewCard.astro";
@@ -17,6 +18,8 @@ import logo from "../assets/app-logo.svg";
 import versions from "../assets/check_version.json";
 import phoneDark from "../assets/home/phone-dark-portrait.png";
 import phoneLight from "../assets/home/phone-light-portrait.png";
+import phoneDarkMs from "../assets/home/phone-dark-ms-portrait.png";
+import phoneLightMs from "../assets/home/phone-light-ms-portrait.png";
 import playBadge from "../assets/home/google-play-badge.png";
 import izzahAvatar from "../assets/home/playstore-reviews/pp_izzah.jpg";
 import amiruddinAvatar from "../assets/home/playstore-reviews/pp_amiruddin.png";
@@ -25,28 +28,18 @@ import noorAvatar from "../assets/home/playstore-reviews/pp_noor_azizi.png";
 import sitiAvatar from "../assets/home/playstore-reviews/pp_s.png";
 import rizalAvatar from "../assets/home/playstore-reviews/pp_rizal.jpg";
 
-const features = [
-  {
-    icon: Sparkles,
-    heading: "Sleek Design.",
-    text: "Designed from the the ground up to be simple and pleasing to the eye.",
-  },
-  {
-    icon: Heart,
-    heading: "Reliable.",
-    text: "Data is taken from the official local authority",
-  },
-  {
-    icon: BookOpen,
-    heading: "We are open source.",
-    text: "Found a bug or want to contribute to the project? Visit our GitHub!",
-  },
-  {
-    icon: RefreshCw,
-    heading: "Continuous support.",
-    text: "We are always working on improving the app and adding new features.",
-  },
-];
+interface Props {
+  locale?: HomeLocale;
+}
+
+const { locale = "en" } = Astro.props;
+const copy = homeCopy[locale];
+const icons = [Sparkles, Heart, BookOpen, RefreshCw];
+const features = copy.features.map((feature, index) => ({
+  ...feature,
+  icon: icons[index],
+  fill: index === 1 ? "currentColor" : "none",
+}));
 ---
 
 <main class="overflow-hidden">
@@ -63,14 +56,21 @@ const features = [
     <div
       class="absolute right-6 top-4 z-10 flex items-center gap-6 text-(--text-primary) lg:right-8"
     >
-      <span title="English" aria-label="Language: English"
-        ><Globe size={25} stroke-width={1.8} aria-hidden="true" /></span
-      >
-      <ThemeToggle />
+      <nav class="flex items-center gap-2 text-sm" aria-label={copy.languageLabel}>
+        <Globe size={20} stroke-width={1.8} aria-hidden="true" />
+        <a href={homePaths.en} data-home-language="en" lang="en" hreflang="en" aria-label="English" title="English"
+          aria-current={locale === "en" ? "page" : undefined}
+          class:list={["rounded-sm hover:text-(--accent)", locale === "en" && "font-semibold text-(--accent)"]}>EN</a>
+        <span aria-hidden="true" class="text-(--text-subtle)">/</span>
+        <a href={homePaths.ms} data-home-language="ms" lang="ms" hreflang="ms" aria-label="Bahasa Melayu" title="Bahasa Melayu"
+          aria-current={locale === "ms" ? "page" : undefined}
+          class:list={["rounded-sm hover:text-(--accent)", locale === "ms" && "font-semibold text-(--accent)"]}>BM</a>
+      </nav>
+      <ThemeToggle locale={locale} />
     </div>
 
     <div class="relative mx-auto max-w-[1152px] px-6 pt-12 lg:px-0 lg:pt-24">
-      <a href="/" class="inline-block rounded-sm" aria-label="Waktu Solat home">
+      <a href={homePaths[locale]} class="inline-block rounded-sm" aria-label={copy.homeLabel}>
         <img
           src={logo.src}
           width="80"
@@ -91,12 +91,12 @@ const features = [
             >
               <span
                 class="rounded-full bg-cyan-500/10 px-3 py-1 text-sm leading-6 font-semibold text-(--accent) ring-1 ring-inset ring-indigo-500/20"
-                >What's New</span
+                >{copy.whatsNew}</span
               >
               <span
                 class="inline-flex items-center gap-2 text-sm leading-6 font-medium text-(--text-primary)"
               >
-                Latest Version: v{versions.android.version}
+                {copy.latestVersion}: v{versions.android.version}
                 <ChevronRight
                   size={20}
                   stroke-width={1.75}
@@ -111,13 +111,12 @@ const features = [
             id="hero-title"
             class="text-[clamp(2.3rem,5vw,3.75rem)] font-medium leading-[1.12] tracking-[-0.045em] text-(--text-primary)"
           >
-            Malaysia Prayer Time
+            {copy.heading}
           </h1>
           <p
             class="mt-5 max-w-[670px] text-base leading-8 font-normal text-(--text-primary) sm:text-lg sm:leading-8"
           >
-            An essential apps for Muslim in Malaysia. Help you determine the
-            latest prayer times, finding qibla and more.
+            {copy.intro}
           </p>
 
           <div class="mt-8 flex flex-wrap items-center gap-x-7 gap-y-3">
@@ -125,12 +124,12 @@ const features = [
               href={"https://play.google.com/store/apps/details?id=live.iqfareez.waktusolatmalaysia&utm_source=waktusolat-site"}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Get Waktu Solat on Google Play"
+              aria-label={copy.downloadLabel}
               class="-ml-[10px] inline-flex rounded-sm sm:hover:opacity-85"
             >
               <Image
                 src={playBadge}
-                alt="Get it on Google Play"
+                alt={copy.downloadAlt}
                 width={250}
                 class="h-auto w-[220px] sm:w-[250px]"
                 loading="eager"
@@ -156,7 +155,7 @@ const features = [
             </a>
           </div>
           <p class="mt-4 text-sm text-(--text-subtle)">
-            *Sorry, this app is not available for iOS yet.
+            {copy.iosNotice}
           </p>
         </div>
 
@@ -169,16 +168,16 @@ const features = [
             class="max-sm:transform-[rotateX(50deg)] drop-shadow-2xl transition-transform duration-200 ease-out motion-reduce:transition-none"
           >
             <Image
-              src={phoneDark}
-              alt="Waktu Solat app showing prayer times"
+              src={locale === "ms" ? phoneDarkMs : phoneDark}
+              alt={copy.screenshotAlt}
               width={360}
               class="phone-dark h-auto w-full"
               loading="eager"
               fetchpriority="high"
             />
             <Image
-              src={phoneLight}
-              alt="Waktu Solat app showing prayer times"
+              src={locale === "ms" ? phoneLightMs : phoneLight}
+              alt={copy.screenshotAlt}
               width={360}
               class="phone-light h-auto w-full"
               loading="eager"
@@ -194,24 +193,24 @@ const features = [
     aria-labelledby="features-title"
   >
     <div class="text-center">
-      <p class="text-sm font-semibold text-(--accent)">Everything you need</p>
+      <p class="text-sm font-semibold text-(--accent)">{copy.featuresLabel}</p>
       <h2
         id="features-title"
         class="mt-3 text-3xl font-bold leading-tight tracking-[-0.035em] text-(--text-primary) md:text-4xl"
       >
-        "Hurry to the prayer. Hurry to success"
+        {copy.featuresHeading}
       </h2>
       <p class="mt-6 text-base text-(--text-muted)">
-        Feature packed while keeping the design clean and minimal
+        {copy.featuresIntro}
       </p>
     </div>
     <div class="mt-20 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-9">
       {
-        features.map(({ icon: Icon, heading, text }) => (
+        features.map(({ icon: Icon, heading, text, fill }) => (
           <div class="flex items-start gap-3 text-base leading-7 text-(--text-muted)">
             <Icon
               size={20}
-              fill={heading === "Reliable." ? "currentColor" : "none"}
+              fill={fill}
               stroke-width={2.4}
               class="mt-1 flex-none text-(--accent)"
               aria-hidden="true"
@@ -237,12 +236,12 @@ const features = [
     </div>
     <div class="relative mx-auto max-w-[1216px] px-6 lg:px-0">
       <div class="mx-auto max-w-[620px] text-center">
-        <p class="text-sm font-semibold text-(--accent)">Reviews</p>
+        <p class="text-sm font-semibold text-(--accent)">{copy.reviewsLabel}</p>
         <h2
           id="reviews-title"
           class="mt-3 text-3xl font-bold leading-tight tracking-[-0.035em] text-(--text-primary) md:text-4xl"
         >
-          What users are saying about the app
+          {copy.reviewsHeading}
         </h2>
       </div>
 
@@ -251,6 +250,7 @@ const features = [
       >
         <div class="order-2 lg:order-1">
           <ReviewCard
+            starsLabel={copy.starsLabel}
             quote="Satisfied using this app. Accurate as per azan from nearby mosque and surau. Thank you developer. Keep up the good work.. May you be duly rewarded"
             name="Amiruddin Khwaja Kamaluddin"
             avatar={amiruddinAvatar}
@@ -258,6 +258,7 @@ const features = [
         </div>
         <div class="order-1 grid gap-6 lg:order-2 lg:gap-8">
           <ReviewCard
+            starsLabel={copy.starsLabel}
             prominent
             quote="the internal design is pretty sejuk mata memandang this app can definetely upgrade where user can read quran and zikir daily so they dont have to install so many apps well done!!! "
             name="izzah yusra"
@@ -265,11 +266,13 @@ const features = [
           />
           <div class="grid gap-6 sm:grid-cols-2 lg:gap-8">
             <ReviewCard
+              starsLabel={copy.starsLabel}
               quote="Clean Fluttery goodness! Hats off to the dev. Maybe JAKIM should learn a thing or two from you."
               name="Abdullah Mubarak"
               avatar={abdullahAvatar}
             />
             <ReviewCard
+              starsLabel={copy.starsLabel}
               quote="suara azan yg sedap dan waktu yg tepat...ok mantap"
               name="Noor Azizi"
               avatar={noorAvatar}
@@ -278,11 +281,13 @@ const features = [
         </div>
         <div class="order-3 grid gap-6 lg:gap-8">
           <ReviewCard
+            starsLabel={copy.starsLabel}
             quote="Terbaik waktu solat yg tepat"
             name="Siti Aishah"
             avatar={sitiAvatar}
           />
           <ReviewCard
+            starsLabel={copy.starsLabel}
             quote="Best apps for people who are looking for straight forward solat time. Not fussy like some of app that load unnecessary thing every time you on it"
             name="Mohd Rizal"
             avatar={rizalAvatar}
@@ -290,14 +295,14 @@ const features = [
         </div>
       </div>
       <p class="mt-12 text-center text-xs text-(--text-subtle)">
-        *Reviews are from Google Play Store
+        {copy.reviewsNotice}
       </p>
     </div>
   </section>
-  <RecentBlogPosts />
+  <RecentBlogPosts locale={locale} />
 </main>
 
-<Footer />
+<Footer locale={locale} />
 
 <script>
   const phoneCard = document.querySelector<HTMLElement>("[data-phone-card]");

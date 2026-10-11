@@ -1,0 +1,9 @@
+---
+import Home from "../../components/Home.astro";
+import Layout from "../../layouts/Layout.astro";
+import { homeCopy } from "../../lib/home";
+---
+
+<Layout title={homeCopy.ms.title} description={homeCopy.ms.description} homeLocale="ms">
+  <Home locale="ms" />
+</Layout>
