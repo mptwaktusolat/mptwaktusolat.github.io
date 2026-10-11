@@ -10,6 +10,7 @@ import {
   Zap,
 } from "@lucide/astro";
 import Footer from "./Footer.astro";
+import RecentBlogPosts from "./RecentBlogPosts.astro";
 import ReviewCard from "./ReviewCard.astro";
 import ThemeToggle from "./ThemeToggle.astro";
 import logo from "../assets/app-logo.svg";
@@ -225,7 +226,7 @@ const features = [
   </section>
 
   <section
-    class="relative pb-28 pt-8 lg:pb-44 lg:pt-0"
+    class="relative pb-12 pt-8 lg:pb-28 lg:pt-0"
     aria-labelledby="reviews-title"
   >
     <div
@@ -292,6 +293,7 @@ const features = [
       </p>
     </div>
   </section>
+  <RecentBlogPosts />
 </main>
 
 <Footer />

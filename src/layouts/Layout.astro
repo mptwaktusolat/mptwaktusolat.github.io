@@ -5,11 +5,17 @@ import "../styles/global.css";
 interface Props {
   title?: string;
   description?: string;
+  ogType?: "website" | "article";
+  postedDate?: string;
+  updatedDate?: string;
 }
 
 const {
   title = "App Waktu Solat Malaysia | Malaysia Prayer Time App",
   description = "Malaysia Prayer Time helps you find accurate prayer times, the qibla direction, and more.",
+  ogType = "website",
+  postedDate,
+  updatedDate,
 } = Astro.props;
 ---
 
@@ -20,7 +26,28 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#171719" />
     <meta name="description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    {
+      ogType === "article" && (
+        <meta property="article:author" content="Muhammad Fareez" />
+      )
+    }
+    {
+      postedDate && (
+        <meta
+          property="article:published_time"
+          content={`${postedDate}T00:00:00Z`}
+        />
+      )
+    }
+    {
+      updatedDate && (
+        <meta
+          property="article:modified_time"
+          content={`${updatedDate}T00:00:00Z`}
+        />
+      )
+    }
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content="/opengraph-image.png" />

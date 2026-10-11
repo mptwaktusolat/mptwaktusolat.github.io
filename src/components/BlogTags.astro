@@ -1,0 +1,32 @@
+---
+interface Props {
+  tags: { label: string; slug: string }[];
+  compact?: boolean;
+}
+const { tags, compact = false } = Astro.props;
+---
+
+<ul
+  aria-label="Tags"
+  class:list={[
+    "flex gap-x-4 gap-y-2",
+    compact ? "min-w-0 flex-1 overflow-hidden" : "flex-wrap",
+  ]}
+>
+  {
+    tags.map((tag) => (
+      <li class:list={[compact && "min-w-0"]}>
+        <a
+          href={`/blog/tags/${tag.slug}`}
+          title={compact ? `#${tag.label}` : undefined}
+          class:list={[
+            "rounded-sm text-sm text-[#0d9488] hover:underline hover:underline-offset-4",
+            compact ? "block truncate" : "inline-block",
+          ]}
+        >
+          #{tag.label}
+        </a>
+      </li>
+    ))
+  }
+</ul>

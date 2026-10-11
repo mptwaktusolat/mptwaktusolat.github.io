@@ -1,0 +1,28 @@
+---
+import { getCollection } from "astro:content";
+import type { InferGetStaticPropsType } from "astro";
+import BlogLayout from "../../../layouts/BlogLayout.astro";
+import BlogPostList from "../../../components/BlogPostList.astro";
+import { groupTags, preparePosts } from "../../../lib/blog";
+export async function getStaticPaths() {
+  return groupTags(preparePosts(await getCollection("blog"))).map((tag) => ({
+    params: { tag: tag.slug },
+    props: { tag },
+  }));
+}
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { tag } = Astro.props;
+---
+
+<BlogLayout
+  title={`Posts tagged “${tag.label}”`}
+  description={`Read Waktu Solat blog posts tagged ${tag.label}.`}
+>
+  <p class="mb-3 text-sm text-(--text-muted)">Tagged</p>
+  <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">{tag.label}</h1>
+  <p class="mt-4 text-(--text-muted)">
+    {tag.posts.length}
+    {tag.posts.length === 1 ? "post" : "posts"}
+  </p>
+  <BlogPostList posts={tag.posts} />
+</BlogLayout>

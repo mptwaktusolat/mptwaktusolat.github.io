@@ -1,0 +1,53 @@
+---
+import Layout from "./Layout.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import Footer from "../components/Footer.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  article?: boolean;
+  postedDate?: string;
+  updatedDate?: string;
+}
+const {
+  title,
+  description,
+  article = false,
+  postedDate,
+  updatedDate,
+} = Astro.props;
+---
+
+<Layout
+  title={`${title} | Waktu Solat Blog`}
+  description={description}
+  ogType={article ? "article" : "website"}
+  postedDate={postedDate}
+  updatedDate={updatedDate}
+>
+  <div class="relative isolate min-h-screen">
+    <div
+      class="hero-glow pointer-events-none absolute inset-x-0 top-0 h-[700px]"
+      aria-hidden="true"
+    >
+    </div>
+    <header
+      class="relative mx-auto flex max-w-4xl items-center justify-between gap-4 px-6 py-6"
+    >
+      <nav
+        aria-label="Blog navigation"
+        class="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-(--text-muted)"
+      >
+        <a href="/" class="hover:text-(--accent)">Home</a>
+        <a href="/blog" class="hover:text-(--accent)">Blog</a>
+        <a href="/blog/tags" class="hover:text-(--accent)">All tags</a>
+      </nav>
+      <ThemeToggle />
+    </header>
+    <main class="relative mx-auto max-w-4xl px-6 pb-12 pt-10 sm:pt-16">
+      <slot />
+    </main>
+    <Footer />
+  </div>
+</Layout>

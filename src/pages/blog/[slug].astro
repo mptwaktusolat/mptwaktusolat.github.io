@@ -1,0 +1,55 @@
+---
+import { getCollection, render } from "astro:content";
+import type { InferGetStaticPropsType } from "astro";
+import BlogLayout from "../../layouts/BlogLayout.astro";
+import BlogTags from "../../components/BlogTags.astro";
+import { BLOG_AUTHOR, formatDate, preparePosts } from "../../lib/blog";
+import "../../styles/blog.css";
+
+export async function getStaticPaths() {
+  return preparePosts(await getCollection("blog")).map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { post } = Astro.props;
+const { Content } = await render(post.entry);
+const { title, description, updatedDate } = post.entry.data;
+---
+
+<BlogLayout
+  title={title}
+  description={description}
+  article
+  postedDate={post.postedDate}
+  updatedDate={updatedDate}
+>
+  <article>
+    <header>
+      <h1 class="text-3xl font-bold leading-tight tracking-tight sm:text-5xl">
+        {title}
+      </h1>
+      <div
+        class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm leading-6 text-(--text-muted)"
+      >
+        <p>
+          Posted <time datetime={post.postedDate}
+            >{formatDate(post.postedDate)}</time
+          >
+        </p>
+        {
+          updatedDate && (
+            <p>
+              Updated{" "}
+              <time datetime={updatedDate}>{formatDate(updatedDate)}</time>
+            </p>
+          )
+        }
+        <p>By <span>{BLOG_AUTHOR}</span></p>
+      </div>
+      <div class="mt-5"><BlogTags tags={post.tags} /></div>
+    </header>
+    <div class="blog-content mt-10 sm:mt-14"><Content /></div>
+  </article>
+</BlogLayout>

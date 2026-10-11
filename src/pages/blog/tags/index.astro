@@ -1,0 +1,32 @@
+---
+import { getCollection } from "astro:content";
+import BlogLayout from "../../../layouts/BlogLayout.astro";
+import { groupTags, preparePosts } from "../../../lib/blog";
+const tags = groupTags(preparePosts(await getCollection("blog")));
+---
+
+<BlogLayout
+  title="All tags"
+  description="Browse Waktu Solat blog posts by topic."
+>
+  <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">All tags</h1>
+  <nav
+    aria-label="Browse posts by tag"
+    class="mt-10 flex flex-wrap gap-x-6 gap-y-5 text-sm leading-6"
+  >
+    {
+      tags.map((tag) => (
+        <a
+          href={`/blog/tags/${tag.slug}`}
+          class="inline-flex max-w-full items-baseline gap-2 rounded-sm hover:underline hover:decoration-(--accent) hover:underline-offset-4"
+        >
+          <span class="wrap-break-word text-(--accent) uppercase">
+            {tag.label}
+          </span>
+          <span class="shrink-0 text-(--text-muted)">({tag.posts.length})</span>
+        </a>
+      ))
+    }
+  </nav>
+  {tags.length === 0 && <p class="mt-10 text-(--text-muted)">No tags yet.</p>}
+</BlogLayout>

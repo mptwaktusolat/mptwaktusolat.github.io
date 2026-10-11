@@ -1,0 +1,42 @@
+---
+import BlogTags from "./BlogTags.astro";
+import { formatDate, type BlogPost } from "../lib/blog";
+interface Props {
+  posts: BlogPost[];
+}
+const { posts } = Astro.props;
+---
+
+<div class="mt-10 space-y-10">
+  {
+    posts.map((post) => (
+      <article class="border-b border-(--text-subtle)/20 pb-10">
+        <div class="flex min-w-0 items-baseline gap-4">
+          <time
+            datetime={post.postedDate}
+            class="shrink-0 text-sm text-(--text-muted)"
+          >
+            {formatDate(post.postedDate)}
+          </time>
+          <BlogTags tags={post.tags} compact />
+        </div>
+        <h2 class="mt-3 text-2xl font-semibold leading-tight sm:text-3xl">
+          <a
+            href={`/blog/${post.slug}`}
+            class="hover:opacity-85 transition-opacity"
+          >
+            {post.entry.data.title}
+          </a>
+        </h2>
+        <p class="mt-4 leading-7 text-(--text-muted)">
+          {post.entry.data.description}
+        </p>
+      </article>
+    ))
+  }
+  {
+    posts.length === 0 && (
+      <p class="text-(--text-muted)">No posts yet. Check back soon.</p>
+    )
+  }
+</div>
