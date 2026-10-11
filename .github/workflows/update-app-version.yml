@@ -1,0 +1,44 @@
+name: Update app version
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: update-app-version
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v7.0.1
+        with:
+          ref: main
+
+      - name: Read latest stable app release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/update_app_version.py
+
+      - name: Commit and deploy changes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          if git diff --quiet -- src/assets/check_version.json; then
+            echo "App version is already up to date."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- src/assets/check_version.json
+          git commit -m "chore: update latest Android app release"
+          git push origin HEAD:main
+          gh workflow run build-deploy-site.yml --ref main

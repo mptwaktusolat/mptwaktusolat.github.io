@@ -14,6 +14,7 @@ import RecentBlogPosts from "./RecentBlogPosts.astro";
 import ReviewCard from "./ReviewCard.astro";
 import ThemeToggle from "./ThemeToggle.astro";
 import logo from "../assets/app-logo.svg";
+import versions from "../assets/check_version.json";
 import phoneDark from "../assets/home/phone-dark-portrait.png";
 import phoneLight from "../assets/home/phone-light-portrait.png";
 import playBadge from "../assets/home/google-play-badge.png";
@@ -95,7 +96,7 @@ const features = [
               <span
                 class="inline-flex items-center gap-2 text-sm leading-6 font-medium text-(--text-primary)"
               >
-                Latest Version:
+                Latest Version: v{versions.android.version}
                 <ChevronRight
                   size={20}
                   stroke-width={1.75}
