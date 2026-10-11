@@ -1,3 +1,5 @@
+<img width="2160" height="1345" alt="image" src="https://github.com/user-attachments/assets/19d476c2-cb5c-44c3-ac17-e4b839187368" />
+
 # Malaysia Prayer Time Website
 
 This is the website for Waktu Solat Malaysia project. Build with [Astro](https://astro.build) and [Tailwind CSS](https://tailwindcss.com/).
