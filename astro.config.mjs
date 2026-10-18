@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
+  prefetch: true,
   // Using fontsource https://docs.astro.build/en/guides/fonts/#using-fontsource
   fonts: [
     {

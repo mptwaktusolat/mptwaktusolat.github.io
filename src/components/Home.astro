@@ -56,21 +56,50 @@ const features = copy.features.map((feature, index) => ({
     <div
       class="absolute right-6 top-4 z-10 flex items-center gap-6 text-(--text-primary) lg:right-8"
     >
-      <nav class="flex items-center gap-2 text-sm" aria-label={copy.languageLabel}>
+      <nav
+        class="flex items-center gap-2 text-sm"
+        aria-label={copy.languageLabel}
+      >
         <Globe size={20} stroke-width={1.8} aria-hidden="true" />
-        <a href={homePaths.en} data-home-language="en" lang="en" hreflang="en" aria-label="English" title="English"
+        <a
+          href={homePaths.en}
+          data-home-language="en"
+          data-astro-prefetch={locale !== "en" ? "hover" : undefined}
+          lang="en"
+          hreflang="en"
+          aria-label="English"
+          title="English"
           aria-current={locale === "en" ? "page" : undefined}
-          class:list={["rounded-sm hover:text-(--accent)", locale === "en" && "font-semibold text-(--accent)"]}>EN</a>
+          class:list={[
+            "rounded-sm hover:text-(--accent)",
+            locale === "en" && "font-semibold text-(--accent)",
+          ]}>EN</a
+        >
         <span aria-hidden="true" class="text-(--text-subtle)">/</span>
-        <a href={homePaths.ms} data-home-language="ms" lang="ms" hreflang="ms" aria-label="Bahasa Melayu" title="Bahasa Melayu"
+        <a
+          href={homePaths.ms}
+          data-home-language="ms"
+          data-astro-prefetch={locale !== "ms" ? "hover" : undefined}
+          lang="ms"
+          hreflang="ms"
+          aria-label="Bahasa Melayu"
+          title="Bahasa Melayu"
           aria-current={locale === "ms" ? "page" : undefined}
-          class:list={["rounded-sm hover:text-(--accent)", locale === "ms" && "font-semibold text-(--accent)"]}>BM</a>
+          class:list={[
+            "rounded-sm hover:text-(--accent)",
+            locale === "ms" && "font-semibold text-(--accent)",
+          ]}>BM</a
+        >
       </nav>
       <ThemeToggle locale={locale} />
     </div>
 
     <div class="relative mx-auto max-w-[1152px] px-6 pt-12 lg:px-0 lg:pt-24">
-      <a href={homePaths[locale]} class="inline-block rounded-sm" aria-label={copy.homeLabel}>
+      <a
+        href={homePaths[locale]}
+        class="inline-block rounded-sm"
+        aria-label={copy.homeLabel}
+      >
         <img
           src={logo.src}
           width="80"
@@ -87,6 +116,7 @@ const features = copy.features.map((feature, index) => ({
           <div class="mb-9">
             <a
               href="/changelog"
+              data-astro-prefetch="hover"
               class="group inline-flex flex-wrap items-center gap-x-6 gap-y-2"
             >
               <span
@@ -139,7 +169,7 @@ const features = copy.features.map((feature, index) => ({
               href="https://api.waktusolat.app"
               target="_blank"
               rel="noopener noreferrer"
-              class="group inline-flex items-center gap-2.5 text-lg font-medium text-[var(--text-primary)] hover:opacity-85"
+              class="group inline-flex items-center gap-2.5 text-lg font-medium text-(--text-primary) hover:opacity-85"
             >
               <span
                 class="flex h-10 w-10 items-center justify-center rounded-full bg-(--text-primary) text-(--page-bg)"

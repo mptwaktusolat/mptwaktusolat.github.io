@@ -2,7 +2,9 @@
 import { getCollection } from "astro:content";
 import { formatDate, preparePosts } from "../lib/blog";
 import { homeCopy, type HomeLocale } from "../lib/home";
-interface Props { locale?: HomeLocale; }
+interface Props {
+  locale?: HomeLocale;
+}
 const { locale = "en" } = Astro.props;
 
 const posts = preparePosts(await getCollection("blog")).slice(0, 3);
@@ -35,6 +37,7 @@ const colourOffset = Math.floor(Math.random() * colours.length);
           {posts.map((post, index) => (
             <a
               href={`/blog/${post.slug}`}
+              data-astro-prefetch="hover"
               style={`background-color: ${colours[(colourOffset + index) % colours.length]}`}
               class:list={[
                 "flex min-w-0 flex-col justify-between gap-8 rounded-3xl p-7 text-white transition-[filter] hover:brightness-110 sm:p-9",
@@ -46,7 +49,10 @@ const colourOffset = Math.floor(Math.random() * colours.length);
               ]}
             >
               <time datetime={post.postedDate} class="text-sm text-white/80">
-                {formatDate(post.postedDate, locale === "ms" ? "ms-MY" : "en-GB")}
+                {formatDate(
+                  post.postedDate,
+                  locale === "ms" ? "ms-MY" : "en-GB",
+                )}
               </time>
               <h3
                 lang="en"
