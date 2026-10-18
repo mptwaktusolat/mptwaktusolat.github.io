@@ -74,8 +74,9 @@ const homeUrl = homeLocale && Astro.site ? new URL(homePaths[homeLocale], Astro.
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="628" />
     <meta property="og:image:alt" content={homeLocale ? homeCopy[homeLocale].screenshotAlt : "Malaysia Prayer Time app"} />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate icon" href="/favicon.ico" />
+    <link rel="shortcut icon" href="/favicon.ico" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <Font cssVariable="--font-poppins" />
     <title>{title}</title>
