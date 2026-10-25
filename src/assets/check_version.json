@@ -1,9 +1,9 @@
 {
     "android": {
-        "tag": "2.14.3+176",
-        "releaseTitle": "September Update",
-        "version": "2.14.3",
-        "buildNumber": 176,
-        "publishedAt": "2026-09-09T10:16:36Z"
+        "tag": "2.14.4+177",
+        "releaseTitle": "October Update",
+        "version": "2.14.4",
+        "buildNumber": 177,
+        "publishedAt": "2026-10-25T08:52:56Z"
     }
 }
