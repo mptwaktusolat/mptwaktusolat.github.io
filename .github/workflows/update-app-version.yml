@@ -39,6 +39,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -- src/assets/check_version.json
-          git commit -m "chore: update latest Android app release"
+          git commit -m ":camera_flash: update latest Android app release"
           git push origin HEAD:main
           gh workflow run build-deploy-site.yml --ref main
