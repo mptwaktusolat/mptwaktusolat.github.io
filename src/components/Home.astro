@@ -195,7 +195,7 @@ const features = copy.features.map((feature, index) => ({
         >
           <div
             data-phone-tilt
-            class="max-sm:transform-[rotateX(50deg)] drop-shadow-2xl transition-transform duration-200 ease-out motion-reduce:transition-none"
+            class="max-sm:transform-[rotateX(30deg)] drop-shadow-2xl transition-transform duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none"
           >
             <Image
               src={locale === "ms" ? phoneDarkMs : phoneDark}
@@ -341,11 +341,15 @@ const features = copy.features.map((feature, index) => ({
   if (phoneCard && phoneTilt) {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    const resetTilt = () => {
+    const updateTilt = () => {
       if (reducedMotion.matches) {
         phoneTilt.style.transform = "none";
       } else if (window.innerWidth < 640) {
-        phoneTilt.style.transform = "rotateX(50deg)";
+        // Mobile browser controls sometimes resize the viewport after scrolling stops.
+        // Always derive the angle from the current position.
+        const progress = Math.max(0, window.scrollY) / window.innerHeight;
+        const rotate = Math.max(0, 30 - progress * 90);
+        phoneTilt.style.transform = `rotateX(${rotate}deg)`;
       } else {
         phoneTilt.style.transform = "rotateX(0deg) rotateY(0deg)";
       }
@@ -364,30 +368,20 @@ const features = copy.features.map((feature, index) => ({
     });
 
     phoneCard.addEventListener("mouseleave", () => {
-      if (window.innerWidth >= 1280) resetTilt();
+      if (window.innerWidth >= 1280) updateTilt();
     });
 
-    window.addEventListener(
-      "scroll",
-      () => {
-        if (window.innerWidth >= 640 || reducedMotion.matches) return;
+    const updateScrollTilt = () => {
+      if (window.innerWidth < 640) updateTilt();
+    };
 
-        const scrollY = -window.scrollY;
-        const windowHeight = window.innerHeight;
-        const elementBottom = phoneCard.getBoundingClientRect().bottom;
-        const triggerPoint = windowHeight - windowHeight * 0.9;
-
-        if (elementBottom > triggerPoint) {
-          const value = Math.abs(scrollY / windowHeight) * 90 - 30;
-          const rotate = Math.abs(Math.min(Math.max(value, -40), 0));
-          phoneTilt.style.transform = `rotateX(${rotate}deg)`;
-        }
-      },
-      { passive: true },
+    window.addEventListener("scroll", updateScrollTilt, { passive: true });
+    window.addEventListener("resize", updateTilt);
+    window.visualViewport?.addEventListener("resize", updateScrollTilt);
+    window.addEventListener("pageshow", () =>
+      requestAnimationFrame(updateTilt),
     );
-
-    window.addEventListener("resize", resetTilt);
-    reducedMotion.addEventListener("change", resetTilt);
-    resetTilt();
+    reducedMotion.addEventListener("change", updateTilt);
+    updateTilt();
   }
 </script>
