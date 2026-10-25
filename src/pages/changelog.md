@@ -5,6 +5,17 @@ description: List of releases of new app updates. Contains bug fixes and overall
 kind: changelog
 ---
 
+## <a id="2.14.4" href="#2.14.4" class="release-hash">#</a> Version 2.14.4 <span class="release-date">25 October 2026 | 14 Jamadilawal 1448</span> [GitHub ↗](https://github.com/mptwaktusolat/app_waktu_solat_malaysia/releases/tag/2.14.4+177)
+
+This update includes a **critical TLS security fix** that blocks compromised eMudhra certificates. In October 2026, eight eMudhra intermediate CA certificates were [reported as compromised](https://emudhra.we-have-a-problem.com/), potentially allowing attackers to forge trusted HTTPS certificates. Although browsers and operating systems have [blocked these certificates](https://blog.google/security/protecting-chrome-and-android-users-from-compromised-emudhra-intermediate-ca-certificates/), Flutter applications on **Android** require a separate fix because they use their own TLS certificate validation system.
+
+Other changes:
+
+- Rebuilt the **Qibla compass** for improved reliability & smoothness. We've changed the underlying package that actively maintained. [#283](https://github.com/mptwaktusolat/app_waktu_solat_malaysia/pull/283).
+- **Prayer zones** data is now fetched remotely from the [API](https://api.waktusolat.app/). This will allow the zones list to be updated without pushing a new app update - preparing for upcoming [Selangor zones updates](https://github.com/mptwaktusolat/api-waktusolat-x/issues/55) on 2027. [#284](https://github.com/mptwaktusolat/app_waktu_solat_malaysia/issue/284).
+- Updated the app update checker to use the new endpoint.
+- Bundled fonts directly with the app and simplified font selections.
+
 ## <a id="2.14.3" href="#2.14.3" class="release-hash">#</a> Version 2.14.3 <span class="release-date">9 September 2026 | 27 Rabiulawal 1448</span> [GitHub ↗](https://github.com/mptwaktusolat/app_waktu_solat_malaysia/releases/tag/2.14.3+176)
 
 - Waktu **Dhuha** now is shown based on JAKIM API, not calculated on device. JAKIM recently introduced this change. [#281](https://github.com/mptwaktusolat/app_waktu_solat_malaysia/pull/281)
